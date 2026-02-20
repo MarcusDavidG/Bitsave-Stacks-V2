@@ -1,0 +1,22 @@
+---
+id: 0
+name: BitSave V3 - Fixed Repeat Deposits
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://localhost:18443"
+genesis:
+  contracts: []
+  wallets:
+    - name: deployer
+      address: ST2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+      balance: 100000000
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: bitsave-v3-fixed
+            expected-sender: ST2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+            cost: 70000
+            path: contracts/bitsave-v3.clar
+            clarity-version: 3

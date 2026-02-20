@@ -1,0 +1,18 @@
+---
+id: 1
+name: BitSave V2 Deployment
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://localhost:18443"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: bitsave-v2
+            expected-sender: ST2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+            cost: 46000
+            path: contracts/bitsave-v2.clar
+            anchor-block-only: true
+            clarity-version: 3
+      epoch: "3.2"

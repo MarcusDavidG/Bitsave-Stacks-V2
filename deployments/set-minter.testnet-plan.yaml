@@ -1,0 +1,18 @@
+---
+id: 1
+name: Set Authorized Minter
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-call:
+            contract-id: ST2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW.bitsave-badges
+            expected-sender: ST2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+            method: set-authorized-minter
+            parameters:
+              - "'ST2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW.bitsave"
+            cost: 10000
+      epoch: "3.2"

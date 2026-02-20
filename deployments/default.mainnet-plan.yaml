@@ -1,0 +1,25 @@
+---
+id: 0
+name: Mainnet deployment
+network: mainnet
+stacks-node: "https://api.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.mainnet.stacks.co:8332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: bitsave-badges
+            expected-sender: SP2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+            cost: 59750
+            path: contracts/bitsave-badges.clar
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: bitsave
+            expected-sender: SP2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+            cost: 46000
+            path: contracts/bitsave.clar
+            anchor-block-only: true
+            clarity-version: 3
+      epoch: "3.2"

@@ -1,0 +1,109 @@
+name: Security Issue
+description: Report a security vulnerability (use this for non-critical security issues only)
+title: "[Security]: "
+labels: ["security", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **IMPORTANT**: If this is a critical security vulnerability that could put user funds at risk, 
+        please DO NOT create a public issue. Instead, email us directly at security@bitsave.example.com
+        
+        This template is for non-critical security improvements and general security concerns.
+  
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Security Issue Severity
+      description: How severe is this security concern?
+      options:
+        - Low (security improvement suggestion)
+        - Medium (potential security concern)
+        - High (security vulnerability with limited impact)
+        - Critical (DO NOT USE - email security@bitsave.example.com instead)
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Security Issue Description
+      description: Describe the security concern or vulnerability
+      placeholder: Please provide a clear description of the security issue...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential Impact
+      description: What could happen if this security issue is exploited?
+      placeholder: If exploited, this could lead to...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce (if applicable)
+      description: If this is a vulnerability, how can it be reproduced?
+      placeholder: |
+        1. Step one
+        2. Step two
+        3. Observe security issue
+  
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      multiple: true
+      options:
+        - Smart contracts
+        - Frontend application
+        - API/Backend
+        - Infrastructure
+        - Documentation
+        - Development tools
+    validations:
+      required: true
+  
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Suggested Mitigation
+      description: Do you have any suggestions for how to fix or mitigate this issue?
+      placeholder: This could be mitigated by...
+  
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: What environment did you discover this in?
+      value: |
+        - Network: [mainnet/testnet/devnet]
+        - Contract version: [if applicable]
+        - Browser: [if frontend related]
+        - OS: [if relevant]
+      render: markdown
+  
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Responsible Disclosure
+      description: Please confirm your understanding of responsible disclosure
+      options:
+        - label: I understand that critical vulnerabilities should be reported privately via email
+          required: true
+        - label: I will not publicly disclose details until the issue is resolved
+          required: true
+        - label: I am reporting this to help improve the security of the project
+          required: true
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

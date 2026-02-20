@@ -1,0 +1,18 @@
+---
+id: 1
+name: Set badge minter authorization - Mainnet
+network: mainnet
+stacks-node: "https://api.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.mainnet.stacks.co:8332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-call:
+            contract-id: SP2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW.bitsave-badges
+            expected-sender: SP2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW
+            method: set-authorized-minter
+            parameters:
+              - "'SP2QR5BT57BTVQM69ZFQBMW3BH7KDN3FX56H02TEW.bitsave"
+            cost: 1000
+      epoch: "3.2"
