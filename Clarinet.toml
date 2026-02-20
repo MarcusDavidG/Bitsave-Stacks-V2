@@ -1,8 +1,8 @@
 [project]
 name = "bitsave"
-description = ""
-authors = []
-telemetry = true
+description = "Bitcoin-Powered STX Savings Vault"
+authors = ["Marcus David"]
+telemetry = false
 cache_dir = "./.cache"
 
 [contracts.bitsave]

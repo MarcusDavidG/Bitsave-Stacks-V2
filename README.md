@@ -1,144 +1,207 @@
-#  BitSave – Bitcoin-Powered STX Savings Vault
+# BitSave – Bitcoin-Powered STX Savings Vault
 
 **Author:** Marcus David  
-**Purpose:** A decentralized savings vault on Stacks where users lock STX for a period and earn on-chain reputation points and achievement NFT badges.
+**Purpose:** A decentralized savings vault on Stacks where users lock STX for a period and earn rewards and on-chain reputation points.
 
 ---
 
-##  Overview
+## Overview
 
-**BitSave** is a decentralized, Bitcoin-powered savings protocol built on the **Stacks blockchain**.  
-It enables users to **lock STX tokens** for a chosen duration, **earn yield and reputation**, and receive **achievement NFT badges** when reaching certain milestones.
-
-The system combines **DeFi savings mechanics** with **on-chain reputation tracking**, introducing gamification and user trust into a non-custodial savings experience.  
-Reputation points reflect a user’s long-term saving habits, while NFT badges serve as collectible proofs of commitment—paving the way for **DAO participation, boosted rewards, and social credit systems** in future versions.
-
-BitSave’s design follows a **modular smart contract architecture**:
-- The main contract, `bitsave.clar`, manages deposits, withdrawals, and reward calculations.
-- The secondary contract, `bitsave-badges.clar`, handles NFT badge minting and metadata via SIP-009 compliance.
-
-Together, they form a foundation for **trustless savings**, **on-chain identity**, and **reputation-based finance** within the Stacks ecosystem.
+**BitSave** is a production-ready, decentralized savings protocol built on the **Stacks blockchain**.  
+Users **lock STX tokens** for a chosen duration, **earn 10% rewards**, and build **on-chain reputation**.
 
 ---
 
-##  Features
--  Deposit STX and lock for a chosen duration
--  Withdraw only after lock expiry
--  Earn on-chain reputation points upon withdrawal
--  Auto-mint NFT badges when reaching reputation milestones (1000+ points)
--  SIP-009 compliant achievement badges with metadata
--  Admin can adjust reward rate
+## Features
+- Deposit STX and lock for chosen duration (min 1 day)
+- Earn 10% rewards on locked amount
+- Withdraw after lock expiry with rewards
+- Build on-chain reputation with every withdrawal
+- Emergency withdraw option (forfeit rewards)
+- NFT badge system for achievements
+- Production-ready frontend with wallet integration
 
 ---
 
-##  Smart Contract Functions
+## Quick Start
+
+### 1. Deploy Smart Contracts
+
+```bash
+# Check contracts are valid
+clarinet check
+
+# Deploy to testnet
+clarinet deployments generate --testnet
+clarinet deployments apply --testnet
+
+# Deploy to mainnet
+clarinet deployments generate --mainnet
+clarinet deployments apply --mainnet
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+
+### 2. Setup Frontend
+
+```bash
+cd frontend
+npm install
+
+# Update contract addresses in:
+# - src/components/DepositForm.js
+# - src/components/SavingsDisplay.js  
+# - src/components/ReputationDisplay.js
+
+npm run dev
+```
+
+Frontend runs at http://localhost:3000
+
+### 3. Build for Production
+
+```bash
+cd frontend
+npm run build
+npm start
+```
+
+---
+
+## Smart Contract Functions
 
 ### BitSave Contract (`bitsave.clar`)
 
 | Function | Type | Description |
 |-----------|------|--------------|
-| `deposit(lock-period)` | public | Locks user's STX for specified block period |
-| `withdraw()` | public | Withdraws funds + rewards after maturity, auto-mints badge if eligible |
+| `deposit(amount, lock-period)` | public | Locks STX for specified blocks |
+| `withdraw()` | public | Withdraws funds + rewards after maturity |
+| `emergency-withdraw()` | public | Withdraws principal only (no rewards) |
 | `set-reward-rate(new-rate)` | admin | Updates reward rate |
 | `get-savings(user)` | read-only | Returns user's savings info |
 | `get-reputation(user)` | read-only | Returns reputation score |
 | `get-reward-rate()` | read-only | Returns current rate |
+| `calculate-reward(amount)` | read-only | Calculates reward for amount |
+| `get-total-return(user)` | read-only | Returns total with rewards |
 
 ### BitSave Badges Contract (`bitsave-badges.clar`)
 
 | Function | Type | Description |
 |-----------|------|--------------|
-| `set-authorized-minter(minter)` | admin | Sets who can mint badges (BitSave contract) |
-| `transfer-admin(new-admin)` | admin | Transfers admin role |
-| `mint(recipient, metadata)` | authorized | Mints new badge to recipient |
-| `transfer(token-id, sender, recipient)` | public | Transfers badge ownership |
-| `burn(token-id)` | public | Burns/destroys a badge |
+| `set-authorized-minter(minter)` | admin | Authorizes contract to mint |
+| `mint(recipient, name, tier, threshold)` | authorized | Mints badge to recipient |
+| `transfer(token-id, sender, recipient)` | public | Transfers badge |
+| `burn(token-id)` | public | Burns badge |
 | `get-owner(token-id)` | read-only | Returns badge owner |
-| `get-token-uri(token-id)` | read-only | Returns badge metadata |
-| `get-next-token-id()` | read-only | Returns next token ID |
-| `get-authorized-minter()` | read-only | Returns authorized minter |
+| `get-metadata(token-id)` | read-only | Returns badge metadata |
+| `get-token-uri(token-id)` | read-only | Returns token URI |
 
 ---
 
-##  Development Setup
+## Frontend Features
 
-```bash
-# Install Clarinet
-npm install -g @hirosystems/clarinet
-
-# Check project validity
-clarinet check
-
-# Run tests
-npm install
-npm test
-
-# (Optional) Run local console
-clarinet console
-```
-
-### Setting Up Badge System
-
-After deploying contracts, authorize BitSave to mint badges:
-
-```clarity
-;; Run this from the deployer account
-(contract-call? .bitsave-badges set-authorized-minter .bitsave)
-```
+- **Wallet Integration**: Connect with Hiro, Leather, or Xverse wallet
+- **Deposit Interface**: Choose amount and lock period with reward preview
+- **Savings Dashboard**: View locked amount, rewards, and unlock status
+- **Reputation System**: Track reputation points with visual levels
+- **Responsive Design**: Works on desktop and mobile
+- **Real-time Updates**: Auto-refresh savings and reputation data
 
 ---
 
-##  Badge System
-
-Users automatically receive NFT badges when they reach reputation milestones:
-
-- **Threshold:** 1000 reputation points
-- **Badge Tier:** Gold - "Loyal Saver"
-- **Metadata:** Includes achievement name, tier, and threshold
-- **Standard:** SIP-009 compliant NFTs
-
-### How to Earn a Badge
-
-1. Deposit STX with a lock period
-2. Wait for the lock period to expire
-3. Withdraw your STX
-4. If you have ≥1000 reputation points, you'll automatically receive a badge!
-
-**Example:**
-- Deposit 10,000 STX
-- Reward rate: 10%
-- Reputation earned: 1,000 points
-- Result: Badge minted on withdrawal 
-
-##  Future Roadmap
-
--  ~~NFT badges for loyal savers~~ (COMPLETED)
-- Multiple badge tiers (Bronze, Silver, Gold, Platinum)
-- Time-based and streak badges
-- Badge marketplace and trading
-- DAO-based governance for reward rates
-- Integration with sBTC for Bitcoin yield vaults
-
----
-
-##  Project Structure
+## Project Structure
 
 ```
-Bitsave-Stacks/
+Bitsave-Stacks-V2/
 │
-├── Clarinet.toml
 ├── contracts/
 │   ├── bitsave.clar              # Main savings vault contract
-│   └── bitsave-badges.clar       # NFT badge system contract
-├── tests/
-│   ├── bitsave-badges_test.ts    # Badge contract tests
-│   └── bitsave_integration_test.ts # Integration tests
-├── README.md
-└── TODO.md
+│   └── bitsave-badges.clar       # NFT badge system
+│
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── layout.js
+│   │   │   ├── page.js
+│   │   │   └── globals.css
+│   │   └── components/
+│   │       ├── WalletConnect.js
+│   │       ├── DepositForm.js
+│   │       ├── SavingsDisplay.js
+│   │       └── ReputationDisplay.js
+│   ├── package.json
+│   └── README.md
+│
+├── Clarinet.toml
+├── DEPLOYMENT.md
+└── README.md
 ```
 
 ---
 
-##  License
+## Deployment Checklist
 
-This project is open source and available for educational purposes.
+- [ ] Contracts validated with `clarinet check`
+- [ ] Deployed to testnet
+- [ ] Tested deposit/withdraw on testnet
+- [ ] Authorized badge minting
+- [ ] Deployed to mainnet
+- [ ] Updated frontend with contract addresses
+- [ ] Frontend tested with real wallet
+- [ ] Production build created
+- [ ] Deployed to hosting platform
+
+---
+
+## Technology Stack
+
+**Smart Contracts:**
+- Clarity (Stacks blockchain)
+- Clarinet (development & testing)
+
+**Frontend:**
+- Next.js 15
+- React 19
+- Tailwind CSS
+- @stacks/connect (wallet integration)
+- @stacks/transactions (contract calls)
+
+---
+
+## Security Features
+
+- Post-conditions on all transfers
+- Owner-only admin functions
+- Lock period enforcement
+- Emergency withdraw option
+- Input validation
+
+---
+
+## Future Enhancements
+
+- Multiple badge tiers (Bronze, Silver, Gold, Platinum, Diamond)
+- Time-based streak badges
+- Badge marketplace
+- DAO governance for reward rates
+- sBTC integration
+- Compound interest options
+
+---
+
+## License
+
+Open source - Educational purposes
+
+---
+
+## Support
+
+For issues or questions:
+- Check [DEPLOYMENT.md](DEPLOYMENT.md)
+- Check [frontend/README.md](frontend/README.md)
+- Review contract code in `contracts/`
+
+---
+
+**Built on Stacks • Secured by Bitcoin**
